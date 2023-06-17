@@ -231,6 +231,7 @@ const Menu = React.forwardRef<MenuRef, MenuProps>((props, ref) => {
     () => parseItems(children, items, EMPTY_LIST),
     [children, items],
   );
+  console.log('<render> rc-menu');
 
   const [mounted, setMounted] = React.useState(false);
 
@@ -293,6 +294,10 @@ const Menu = React.forwardRef<MenuRef, MenuProps>((props, ref) => {
   );
 
   React.useEffect(() => {
+
+    console.log('mergedMode', mergedMode);
+    console.log('mergedInlineCollapsed', mergedInlineCollapsed);
+
     setInternalMode(mergedMode);
     setInternalInlineCollapsed(mergedInlineCollapsed);
 
@@ -304,6 +309,7 @@ const Menu = React.forwardRef<MenuRef, MenuProps>((props, ref) => {
       setMergedOpenKeys(inlineCacheOpenKeys);
     } else {
       // Trigger open event in case its in control
+      console.log('::308');
       triggerOpenKeys(EMPTY_LIST);
     }
   }, [mergedMode, mergedInlineCollapsed]);
@@ -357,8 +363,8 @@ const Menu = React.forwardRef<MenuRef, MenuProps>((props, ref) => {
       allVisible
         ? EMPTY_LIST
         : childList
-            .slice(lastVisibleIndex + 1)
-            .map(child => child.key as string),
+          .slice(lastVisibleIndex + 1)
+          .map(child => child.key as string),
     );
   }, [lastVisibleIndex, allVisible]);
 
@@ -450,6 +456,7 @@ const Menu = React.forwardRef<MenuRef, MenuProps>((props, ref) => {
 
     // Whatever selectable, always close it
     if (!multiple && mergedOpenKeys.length && internalMode !== 'inline') {
+      console.log('::455');
       triggerOpenKeys(EMPTY_LIST);
     }
   };
@@ -475,6 +482,7 @@ const Menu = React.forwardRef<MenuRef, MenuProps>((props, ref) => {
     }
 
     if (!isEqual(mergedOpenKeys, newOpenKeys, true)) {
+      console.log('::481');
       triggerOpenKeys(newOpenKeys, true);
     }
   });
@@ -523,15 +531,15 @@ const Menu = React.forwardRef<MenuRef, MenuProps>((props, ref) => {
     internalMode !== 'horizontal' || disabledOverflow
       ? childList
       : // Need wrap for overflow dropdown that do not response for open
-        childList.map((child, index) => (
-          // Always wrap provider to avoid sub node re-mount
-          <MenuContextProvider
-            key={child.key}
-            overflowDisabled={index > lastVisibleIndex}
-          >
-            {child}
-          </MenuContextProvider>
-        ));
+      childList.map((child, index) => (
+        // Always wrap provider to avoid sub node re-mount
+        <MenuContextProvider
+          key={child.key}
+          overflowDisabled={index > lastVisibleIndex}
+        >
+          {child}
+        </MenuContextProvider>
+      ));
 
   // >>>>> Container
   const container = (
