@@ -482,7 +482,7 @@ const Menu = React.forwardRef<MenuRef, MenuProps>((props, ref) => {
     }
 
     if (!isEqual(mergedOpenKeys, newOpenKeys, true)) {
-      console.log('::481');
+      console.log('::481--');
       triggerOpenKeys(newOpenKeys, true);
     }
   });
